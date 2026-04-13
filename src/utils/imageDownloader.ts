@@ -229,9 +229,12 @@ export async function downloadImage({
     return;
   }
   
-  // 加载二维码图片
+  // 加载 Logo 图片和二维码图片
+  const logoImage = new Image();
+  logoImage.src = '/icon-192x192.png';
+
   const qrCodeImage = new Image();
-  qrCodeImage.src = '/website_qrcode.png'; // 使用public目录中的图片
+  qrCodeImage.src = '/website_qrcode.png';
   
   // 主要下载处理函数
   const processDownload = () => {
@@ -349,40 +352,30 @@ export async function downloadImage({
     
     // 2. 左侧品牌色块 - 作为Logo载体
     const brandBlockWidth = titleBarHeight * 0.8;
-    const brandGradient = ctx.createLinearGradient(0, 0, brandBlockWidth, titleBarHeight);
-    brandGradient.addColorStop(0, '#6366F1'); // 现代蓝色
-    brandGradient.addColorStop(1, '#8B5CF6'); // 现代紫色
-    
-    ctx.fillStyle = brandGradient;
+    ctx.fillStyle = '#1F2937'; // 纯蓝色背景
     ctx.fillRect(0, 0, brandBlockWidth, titleBarHeight);
     
     // 3. 绘制现代Logo - 几何图形组合
-    const logoSize = titleBarHeight * 0.4;
-    const logoX = brandBlockWidth / 2;
-    const logoY = titleBarHeight / 2;
+    // 3. 绘制 Logo 图片
+    const logoSize = titleBarHeight * 0.7;
+    const logoX = (brandBlockWidth - logoSize) / 2;
+    const logoY = (titleBarHeight - logoSize) / 2;
     
-    // Logo: 拼豆的抽象表示 - 圆角方块阵列
-    ctx.fillStyle = '#FFFFFF';
-    const beadSize = logoSize / 4;
-    const beadSpacing = beadSize * 1.2;
-    
-    for (let row = 0; row < 3; row++) {
-      for (let col = 0; col < 3; col++) {
-        const beadX = logoX - logoSize/2 + col * beadSpacing;
-        const beadY = logoY - logoSize/2 + row * beadSpacing;
-        
-        // 绘制圆角方块，模拟拼豆
-        ctx.beginPath();
-        ctx.roundRect(beadX, beadY, beadSize, beadSize, beadSize * 0.2);
-        ctx.fill();
-        
-        // 添加中心小圆点，增加拼豆特征
-        ctx.fillStyle = 'rgba(99, 102, 241, 0.3)';
-        ctx.beginPath();
-        ctx.arc(beadX + beadSize/2, beadY + beadSize/2, beadSize * 0.15, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = '#FFFFFF';
-      }
+    // 绘制 Logo 图片（icon-192x192.png）
+    if (logoImage.complete && logoImage.naturalWidth !== 0) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.roundRect(logoX, logoY, logoSize, logoSize, logoSize * 0.1);
+      ctx.clip();
+      ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
+      ctx.restore();
+    } else {
+      // 图片未加载时的占位符
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = `bold ${Math.floor(logoSize * 0.4)}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('XY', brandBlockWidth / 2, titleBarHeight / 2);
     }
     
     // 4. 主标题 - 现代字体，清晰层次
@@ -720,12 +713,14 @@ export async function downloadImage({
         // 绘制色号
         ctx.fillStyle = '#333333';
         ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
         ctx.fillText(getColorKeyByHex(key, selectedColorSystem), itemX + swatchSize + 5, rowY);
-        
+
         // 绘制数量 - 在每个项目的右侧
         const countText = `${cellData.count} 颗`;
         ctx.textAlign = 'right';
-        
+        ctx.textBaseline = 'middle';
+
         // 根据列数计算数字的位置
         // 如果只有一列，就靠右绘制
         if (renderNumColumns === 1) {
@@ -839,14 +834,37 @@ export async function downloadImage({
     }
   };
   
-  // 图片加载后处理，或在加载失败时使用占位符
-  if (qrCodeImage.complete) {
+  // 等待两张图片都加载完成
+  let logoLoaded = logoImage.complete;
+  let qrLoaded = qrCodeImage.complete;
+
+  const checkAndProcess = () => {
+    if (logoLoaded && qrLoaded) {
+      processDownload();
+    }
+  };
+
+  if (logoLoaded && qrLoaded) {
     processDownload();
   } else {
-    qrCodeImage.onload = processDownload;
+    logoImage.onload = () => {
+      logoLoaded = true;
+      checkAndProcess();
+    };
+    logoImage.onerror = () => {
+      console.warn("Logo 图片加载失败，将使用占位符");
+      logoLoaded = true;
+      checkAndProcess();
+    };
+
+    qrCodeImage.onload = () => {
+      qrLoaded = true;
+      checkAndProcess();
+    };
     qrCodeImage.onerror = () => {
       console.warn("二维码图片加载失败，将使用占位符");
-      processDownload();
+      qrLoaded = true;
+      checkAndProcess();
     };
   }
 } 
