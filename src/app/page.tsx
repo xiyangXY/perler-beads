@@ -43,6 +43,39 @@ const floatAnimation = `
   }
 `;
 
+// 像素风格背景样式
+const pixelBackgroundStyle = `
+  .pixel-bg {
+    position: relative;
+  }
+  .pixel-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      linear-gradient(45deg, #e0e7ff 25%, transparent 25%),
+      linear-gradient(-45deg, #e0e7ff 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #e0e7ff 75%),
+      linear-gradient(-45deg, transparent 75%, #e0e7ff 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .dark .pixel-bg::before {
+    background-image: 
+      linear-gradient(45deg, #1e3a5f 25%, transparent 25%),
+      linear-gradient(-45deg, #1e3a5f 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #1e3a5f 75%),
+      linear-gradient(-45deg, transparent 75%, #1e3a5f 75%);
+    opacity: 0.2;
+  }
+`;
+
 // Helper function for sorting color keys - 保留原有实现，因为未在utils中导出
 function sortColorKeys(a: string, b: string): number {
   const regex = /^([A-Z]+)(\d+)$/;
@@ -1853,6 +1886,9 @@ export default function Home() {
     {/* 添加自定义动画样式 */}
     <style dangerouslySetInnerHTML={{ __html: floatAnimation }} />
     
+    {/* 添加像素风格背景样式 */}
+    <style dangerouslySetInnerHTML={{ __html: pixelBackgroundStyle }} />
+    
     {/* PWA 安装按钮 */}
     <InstallPWA />
     
@@ -1901,7 +1937,7 @@ export default function Home() {
     />
 
     {/* Apply dark mode styles to the main container */}
-    <div className="min-h-screen flex flex-col items-center bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 font-[family-name:var(--font-geist-sans)] overflow-x-hidden">
+    <div className="min-h-screen flex flex-col items-center bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 font-[family-name:var(--font-geist-sans)] overflow-x-hidden pixel-bg">
       {/* Apply dark mode styles to the header */}
       <header className="w-full md:max-w-4xl text-center mt-6 mb-8 sm:mt-8 sm:mb-10 relative overflow-hidden">
         {/* Adjust decorative background colors for dark mode */}
@@ -1968,11 +2004,8 @@ export default function Home() {
           </div>
           {/* Slogan */}
           <p className="mt-3 text-sm sm:text-base font-light text-gray-500 dark:text-gray-400 text-center tracking-[0.15em]">
-            让像素创意属于每一个人
+            以像素为笔，让每一个人都能落笔成创意
           </p>
-
-          {/* 来源提示 */}
-          <p className="mt-2 text-[10px] text-gray-400 dark:text-gray-500">发布平台请标注来源或保留图片水印及标识</p>
         </div>
       </header>
 
