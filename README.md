@@ -31,7 +31,7 @@
 ## 快速开始
 
 ```bash
-git clone https://github.com/Zippland/perler-beads.git
+git clone url
 cd perler-beads
 npm install
 npm run dev
