@@ -105,11 +105,38 @@ server.listen(port, hostname, () => {
   }, 1000);
 });
 
-// 优雅退出
-process.on('SIGINT', () => {
+// 防止内存泄漏警告
+server.setMaxListeners(20);
+
+// 标记是否正在关闭
+let isShuttingDown = false;
+
+// 关闭服务的函数
+function shutdown() {
+  if (isShuttingDown) return;
+  isShuttingDown = true;
+  
   console.log('\n  正在关闭服务...');
   server.close(() => {
-    console.log('  服务已停止');
     process.exit(0);
   });
-});
+  
+  // 强制退出（如果 3 秒内没有关闭）
+  setTimeout(() => {
+    process.exit(0);
+  }, 3000);
+}
+
+// Windows 下处理 Ctrl+C
+if (process.platform === 'win32') {
+  const rl = require('readline').createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  rl.on('SIGINT', shutdown);
+}
+
+// 优雅退出
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
