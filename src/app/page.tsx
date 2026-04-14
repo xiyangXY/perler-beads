@@ -160,6 +160,7 @@ export default function Home() {
   // 新增：一键擦除模式状态
   const [isEraseMode, setIsEraseMode] = useState<boolean>(false);
   // 新增状态变量：控制打赏弹窗
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isDonationModalOpen, setIsDonationModalOpen] = useState<boolean>(false);
   const [customPaletteSelections, setCustomPaletteSelections] = useState<PaletteSelections>({});
   const [isCustomPaletteEditorOpen, setIsCustomPaletteEditorOpen] = useState<boolean>(false);
