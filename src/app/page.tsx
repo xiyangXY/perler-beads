@@ -1966,7 +1966,7 @@ export default function Home() {
               {/* Brand name - 汉堡小小王 with ultra fancy effects */}
               <div className="relative">
                 <h1 className="relative text-4xl sm:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-400 tracking-wider drop-shadow-2xl transform hover:scale-105 transition-transform duration-300">
-                  汉堡小小王
+                  XY
                 </h1>
               </div>
               
@@ -2536,7 +2536,7 @@ export default function Home() {
       {/* Apply dark mode styles to the Footer */}
       <footer className="w-full md:max-w-4xl mt-10 py-6 text-center text-xs sm:text-sm text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700">
         <p className="font-medium text-gray-600 dark:text-gray-300">
-          汉堡小小王 拼豆底稿生成器 &copy; {new Date().getFullYear()}
+          XY 拼豆底稿生成器 &copy; {new Date().getFullYear()}
         </p>
       </footer>
 
