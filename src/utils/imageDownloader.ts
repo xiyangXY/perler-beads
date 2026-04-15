@@ -375,7 +375,7 @@ export async function downloadImage({
       ctx.font = `bold ${Math.floor(logoSize * 0.4)}px sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText('XY', brandBlockWidth / 2, titleBarHeight / 2);
+      ctx.fillText('汉堡小小王', brandBlockWidth / 2, titleBarHeight / 2);
     }
     
     // 4. 主标题 - 现代字体，清晰层次
@@ -391,7 +391,7 @@ export async function downloadImage({
     const titleStartX = brandBlockWidth + titleBarHeight * 0.3;
     const mainTitleY = titleBarHeight * 0.4;
     
-    ctx.fillText('XY', titleStartX, mainTitleY);
+    ctx.fillText('汉堡小小王', titleStartX, mainTitleY);
     
     // 5. 副标题 - 功能说明
     ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
@@ -614,7 +614,7 @@ export async function downloadImage({
 
     // 副水印：放在网格左上角，简洁版本
     const secondaryWatermarkFontSize = Math.max(10, Math.floor(downloadCellSize * 0.5));
-    const secondaryText = '@XY';
+    const secondaryText = '@汉堡小小王';
     
     ctx.font = `500 ${secondaryWatermarkFontSize}px system-ui, -apple-system, sans-serif`;
     const secondaryMetrics = ctx.measureText(secondaryText);
@@ -742,7 +742,7 @@ export async function downloadImage({
       
       // 统计区域水印 - 第三重保护，清晰明显
       const statsWatermarkFontSize = Math.max(10, Math.floor(statsFontSize * 0.7));
-      const statsWatermarkText = '图纸来源：@XY';
+      const statsWatermarkText = '图纸来源：小红书@汉堡小小王';
       
       ctx.font = `500 ${statsWatermarkFontSize}px system-ui, -apple-system, sans-serif`;
       const statsTextMetrics = ctx.measureText(statsWatermarkText);
